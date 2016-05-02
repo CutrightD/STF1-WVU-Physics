@@ -30,6 +30,10 @@ volatile long Geiger[2];  // Max values of 2147483647
 // Bool to determine if Geiger is configured
 bool geigerConfigured;
 
+// Plasma data
+// Bool to determine if Plasma if configured
+bool plasmaConfigured;
+
 void setup() {
   setup_general();
 
@@ -57,7 +61,8 @@ void loop() {
 }
 
 
-// Initialize IO Pins    
+// - Initialize IO Pins
+// - Set booleans    
 // Note: Atmega pins default to inputs
 // redefined solely for clarity.
 void setup_general() {
@@ -70,11 +75,14 @@ void setup_general() {
     PORTF = 0x07;
 
     // Plasma probe pins
-    // Input (Voltage to read)
     // AND'd with radio pins above
+    // Default Input (Voltage to read)
     DDRF &= ~_BV(PF7); // Pin PF7, Mega pin 90
-    // Output (Sweep Voltage)
-    DDRK = _BV(PF6); // Pin PF6 - Mega pin 91 // Originally tried PK0, pin 89
+	// Bi-directional pins for sweeping voltage
+    // Initial Output (Sweep Voltage Out)
+    DDRF &= _BV(PF6); // Pin PF6 - Mega pin 91 // Originally tried PK0, pin 89
+	// Initial Input (Sweep Voltage In)
+	DDRF &= ~_BV(PF5); // Pin PF5 - Mega pin 92
     
     // Two pins for Geiger counter inputs
     DDRE = ~_BV(PE5)  // PE5/INT5, Mega Pin 7
@@ -83,6 +91,13 @@ void setup_general() {
     // TODO - I2C Pins
     DDRD = 0x00; // temp - set to correct, depends on i2c implementation
     PORTD = 0x00; //temp - set to correct, depends on i2c implementation
+
+	radioConfigured = False;
+	radioSample = False;
+
+	geigerConfigured = False;
+
+	plasmaConfigured = False;
 }
 
 void setup_adc() {
@@ -138,17 +153,3 @@ void teardown_adc(){
   //TODO
 }
 
-void plasma_probe() {
-  // Goal: sweep a bias voltage V_b and measure a current I (i.e. a voltage V_shunt = R_shunt*I)
-  // Implementation: increment the voltage V_b and apply to an output pin.
-  // Read the V_shunt at an input pin.
-  // PWM- or loop-based.
-  
-//  int x = 1;
-//   for (int i = 0; i < 255; i = i + 1){
-//      analogWrite(plasmaPin_Out, i);
-//      delay(10); // Need a delay?
-//      X = analogRead(plasmaPin_In) // To be handled
-//   } 
-
-}

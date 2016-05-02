@@ -92,5 +92,5 @@ ISR(TIMER1_COMPA_vect) {
   if ( radioSample == false)
     radioSample = true;
   else
-    Serial.print("Flag sent to true and attempted to sample again - flag unchanged.");
+    Serial.print("Radio flag sent to true and attempted to sample again - flag unchanged.");
 }
