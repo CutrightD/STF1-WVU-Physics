@@ -10,7 +10,7 @@ void setup_radio() {
   TCCR1B = 0;
   // Set OCR1A (Top): 16MHz/500Hz /2 = 16000 steps 
   // Divide 16000 by 2 = 8000 because waveforms are centered around OCR1A (because toggle)
-  OCR1A = 8000;
+  OCR1A = 16000;
   // Configure Timer/Counter 1
   // Select P & F Correct PWM Mode, and OCR1A as TOP. 
   
